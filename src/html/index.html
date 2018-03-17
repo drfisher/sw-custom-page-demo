@@ -2,9 +2,60 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Demo: Articles List</title>
+	<title>Simpsons Family</title>
+	<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
+
+	<section class="layout">
+		<header class="layout__header">
+			<a href="/" class="layout__header__logo"></a>
+		</header>
+
+		<h1>Simpsons Family</h1>
+
+		<ul class="articles-list">
+			<li class="articles-list__item">
+				<a href="/homer.html">
+					<img class="avatar" src="/img/homer_avatar.png" alt="" />
+					Homer Simpson
+				</a>
+			</li>
+			<li class="articles-list__item">
+				<a href="/marge.html">
+					<img class="avatar" src="/img/marge_avatar.png" alt="" />
+					Marge Simpson
+				</a>
+			</li>
+			<li class="articles-list__item">
+				<a href="/bart.html">
+					<img class="avatar" src="/img/bart_avatar.png" alt="" />
+					Bart Simpson
+				</a>
+			</li>
+			<li class="articles-list__item">
+				<a href="/lisa.html">
+					<img class="avatar" src="/img/lisa_avatar.png" alt="" />
+					Lisa Simpson
+				</a>
+			</li>
+			<li class="articles-list__item">
+				<a href="/maggie.html">
+					<img class="avatar" src="/img/maggie_avatar.png" alt="" />
+					Maggie Simpson
+				</a>
+			</li>
+		</ul>
+	</section>
+
+	<aside class="offline-notification">
+		<span class="offline-notification__inner">
+			You are offline.
+			<a href="/offline">Check here</a> pages which are available offline.
+		</span>
+	</aside>
+
+	<script src="js/app.js"></script>
 
 </body>
 </html>

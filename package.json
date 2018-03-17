@@ -15,7 +15,14 @@
     "start": "npx static-server ./public",
     "test": "npm run lint"
   },
-  "author": "Pavel Rybin",
+  "author": {
+    "name": "Pavel Rybin",
+    "email": "drfisherozersk@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:drfisher/sw-custom-page-demo.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",
