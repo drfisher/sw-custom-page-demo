@@ -1,0 +1,35 @@
+{
+  "name": "sw-custom-page-demo",
+  "version": "1.0.0",
+  "description": "A small example of custom pages creation in a service worker",
+  "main": "index.js",
+  "scripts": {
+    "assets": "cp -r ./src/html/* ./public && cp -r ./src/img ./public",
+    "build": "npm run lint && npm run clear && npm run create_dirs && npm run assets && npm run compile",
+    "compile": "npm run compile_css && npm run compile_js",
+    "compile_css": "npx stylus ./src/styl/*.styl -o ./public/css/",
+    "compile_js": "npx webpack --mode development",
+    "clear": "rm -rf ./public/*",
+    "create_dirs": "for i in js css img; do mkdir -p ./public/$i; done",
+    "lint": "npx eslint ./src/js/**/*.js",
+    "start": "npx static-server ./public",
+    "test": "npm run lint"
+  },
+  "author": "Pavel Rybin",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "express-simple-static-server": "^0.1.0",
+    "normalize-stylus": "^1.0.1",
+    "pug": "^2.0.1",
+    "pug-loader": "^2.3.0",
+    "stylus": "^0.54.5",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12"
+  }
+}
