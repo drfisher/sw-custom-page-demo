@@ -10,7 +10,7 @@
     "compile_css": "npx stylus ./src/styl/*.styl -o ./public/css/",
     "compile_js": "npx webpack --mode development",
     "clear": "rm -rf ./public/*",
-    "create_dirs": "for i in js css img; do mkdir -p ./public/$i; done",
+    "create_dirs": "for i in css img; do mkdir -p ./public/$i; done",
     "lint": "npx eslint ./src/js/**/*.js",
     "start": "npx static-server ./public",
     "test": "npm run lint"
@@ -29,7 +29,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.0",
-    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-google": "^0.9.1",
     "eslint-plugin-import": "^2.9.0",
     "express-simple-static-server": "^0.1.0",
     "normalize-stylus": "^1.0.1",
@@ -38,5 +38,9 @@
     "stylus": "^0.54.5",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12"
+  },
+  "dependencies": {
+    "idb-keyval": "^3.0.1",
+    "promisified-dom-events": "^2.0.1"
   }
 }
