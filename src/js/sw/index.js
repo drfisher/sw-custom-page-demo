@@ -1,9 +1,8 @@
 import {clear} from 'idb-keyval';
 
-import config from './config';
-import createOfflineListResponse from './createOfflineListResponse';
-import {addToOfflineList} from './offlineList';
-import {fetchSource, log, logError} from './tools';
+import {cacheName, dependenciesToCache, offlineListPath} from './config';
+import {addToOfflineList, createOfflineListResponse} from './offlineList';
+import {fetchSource, log, logError, ping} from './tools';
 
 /*
  * Установка
@@ -12,10 +11,9 @@ self.addEventListener('install', (event) => {
   log('Installed');
 
   // Загружаем файлы, которые потребуются для offline-режима
-  const {dependenciesToCache} = config;
   const loadDependencies = dependenciesToCache.length ?
-    self.caches.open(config.cacheName)
-      .then((cache) => cache.addAll(config.dependenciesToCache))
+    self.caches.open(cacheName)
+      .then((cache) => cache.addAll(dependenciesToCache))
       .then(() => log('All dependencies were loaded'))
     : Promise.resolve();
 
@@ -30,11 +28,11 @@ self.addEventListener('activate', (event) => {
   const promiseClearIDB = clear().then(() => log('IndexedDB has been cleared'));
 
   // чистим старый кэш
-  const promiseClearCache = self.caches.open(config.cacheName)
+  const promiseClearCache = self.caches.open(cacheName)
     .then((cache) => cache.keys()
       .then((cacheKeys) => Promise.all(cacheKeys.map((request) => {
         // Удаляем все, кроме ресурсов из конфига зависимостей
-        const canDelete = !config.dependenciesToCache.includes(request.url);
+        const canDelete = !dependenciesToCache.includes(request.url);
         return canDelete ? Promise.resolve()
           : cache.delete(request, {ignoreVary: true});
       }))))
@@ -52,8 +50,9 @@ self.addEventListener('activate', (event) => {
  */
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+  const isOfflineListRequested = offlineListPath.test(url.pathname);
 
-  const responsePromise = config.offlineListPath.test(url.pathname)
+  const responsePromise = isOfflineListRequested
     // Создаем кастомный response cо списком материалов, доступных офлайн
     ? createOfflineListResponse()
     // Делаем обычный запрос или возвращаем данные из кэша
@@ -69,6 +68,9 @@ self.addEventListener('message', (event) => {
   const {data = {}} = event;
   const {page} = data;
   switch (data.action) {
+    case 'ping':
+      ping();
+      break;
     case 'registerPage':
       addToOfflineList(page)
         .then(

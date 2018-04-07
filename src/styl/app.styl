@@ -46,17 +46,19 @@ h1
 	&__item
 		margin-bottom: .5em;
 
-		.offline &
-			filter: grayscale(100%)
-			opacity: .75
+.offline
+	& a
+		filter: grayscale(100%)
+		opacity: .6
 
-		.offline &.cached
+		&.cached
 			filter: none
 			opacity: 1
 
 .offline-notification
 	background: #fff
 	bottom: 0
+	box-shadow: 0 -3px 3px rgba(0,0,0,.3)
 	opacity: 0
 	position: fixed
 	text-align: center

@@ -2,8 +2,12 @@ import {loaded} from 'promisified-dom-events';
 
 const SERVICE_WORKER_PATH = '/service-worker.js';
 const CSS_MOD_OFFLINE = 'offline';
+const CSS_MOD_CACHED = 'cached';
+const PING_INTERVAL = 10 * 1000;
 
 const {serviceWorker} = navigator;
+
+let isOnline = true;
 
 // После полной загрузки страницы регистрируем service worker
 if (serviceWorker) {
@@ -18,17 +22,21 @@ if (serviceWorker) {
 
       // Сообщаем, что текущая страница теперь доступна офлайн
       registerPageAsCached();
+
+      // Запускаем ping
+      ping();
     });
 }
 
 /**
  * Обработка сообщения из service worker-а
- * @param {object} message
+ * @param {MessageEvent} e
  */
-function handleMessage(message) {
-  console.log('>>> recieved a message', message);
-  if (message.type === 'networkStatus') {
-    toggleNetworkState();
+function handleMessage(e) {
+  const {data} = e;
+  if (data.action === 'ping' && isOnline !== data.online) {
+    isOnline = data.online;
+    toggleNetworkState(data);
   }
 }
 
@@ -37,8 +45,18 @@ function handleMessage(message) {
  * @param {object} params
  */
 function toggleNetworkState(params) {
-  document.body.classList.toggle(CSS_MOD_OFFLINE, params.isOnline);
-  // todo: подсветка закэшированных ссылок
+  const {online, offlinePages} = params;
+
+  document.body.classList.toggle(CSS_MOD_OFFLINE, !online);
+
+  // Для офлайн режима подсвечиваем закэшированные ссылки
+  if (!online) {
+    Array.from(document.links).forEach((link) => {
+      const href = link.getAttribute('href');
+      const isAvailableOffline = !!offlinePages[href] || href === '/offline/';
+      link.classList.toggle(CSS_MOD_CACHED, isAvailableOffline);
+    });
+  }
 }
 
 /**
@@ -54,6 +72,16 @@ function registerPageAsCached() {
     action: 'registerPage',
     page: {url, title, thumb},
   });
+}
+
+/**
+ * Периодическая проверка доступности сети (нашего сервера)
+ */
+function ping() {
+  postMessage({
+    action: 'ping',
+  });
+   setTimeout(ping, PING_INTERVAL);
 }
 
 /**

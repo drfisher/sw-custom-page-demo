@@ -1,0 +1,22 @@
+html(lang="en")
+  head
+    title Available offline
+    meta(charset="UTF-8")
+    link(rel="stylesheet" href="/css/app.css")
+
+  body
+    section.layout
+      header.layout__header
+        a.layout__header__logo(href="/")
+
+      h1 You can read it offline
+
+      ul.articles-list
+        each page in pages
+          li.articles-list__item
+            a(href=page.url)
+              if page.thumb
+                img.avatar(src=page.thumb alt="")
+              else
+                img.avatar(src="/img/default_thumb.png" alt="")
+              span=page.title
