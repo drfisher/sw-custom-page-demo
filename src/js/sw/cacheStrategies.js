@@ -21,9 +21,9 @@ export function cacheFirst(request) {
         // Каждый раз асинхронно обновляем запрошенный ресурс из сети
         const updatePromise = fetch(request).then((networkResponse) => {
           // Кладем в кэш
-          cache.put(networkResponse.url, networkResponse);
+          cache.put(networkResponse.url, networkResponse.clone());
           // Возвращаем копию
-          return networkResponse.clone();
+          return networkResponse;
         })
           .catch(logError);
         // Возвращаем данные из кэша или результат запроса

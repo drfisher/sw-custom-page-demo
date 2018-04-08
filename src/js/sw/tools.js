@@ -34,7 +34,7 @@ export function fetchSource(request) {
   // Здесь в зависимости от урла мы можем применять
   // разные стратегии кэширования, что-то сохранять "на века",
   // что-то каждый раз обновлять и т.д. (см. './cacheStrategies.js')
-  return cacheStrategies.cacheFallToNetwork(request);
+  return cacheStrategies.cacheFirst(request);
 }
 
 /**

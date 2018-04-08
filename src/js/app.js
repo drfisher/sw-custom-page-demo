@@ -45,7 +45,7 @@ function handleMessage(e) {
  * @param {object} params
  */
 function toggleNetworkState(params) {
-  const {online, offlinePages} = params;
+  const {online, offlinePages = {}} = params;
 
   document.body.classList.toggle(CSS_MOD_OFFLINE, !online);
 
