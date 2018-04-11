@@ -33,8 +33,8 @@ self.addEventListener('activate', (event) => {
       .then((cacheKeys) => Promise.all(cacheKeys.map((request) => {
         // Удаляем все, кроме ресурсов из конфига зависимостей
         const canDelete = !dependenciesToCache.includes(request.url);
-        return canDelete ? Promise.resolve()
-          : cache.delete(request, {ignoreVary: true});
+        return canDelete ? cache.delete(request, {ignoreVary: true})
+          : Promise.resolve();
       }))))
     .then(() => log('Cache has been cleared'));
 
